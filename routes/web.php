@@ -1,10 +1,28 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
-Route::get("/greeting", function () {
-    return view('hello');
+Route::prefix('/blog')->name('blog.')->group(function () {
+    Route::get("/", function (Request $request) {
+        return [
+            "link" => \route('blog.show', ["slug" => "h1q-22", "id" => 1]),
+            "name" => $request->input("name", "nobody"),
+        ];
+    }
+    )->name('index');
+
+    Route::get("/{slug}-{id}", function (string $slug, string $id) {
+        return [
+            "slug" => $slug,
+            "id"   => $id,
+        ];
+    }
+    )->where([
+        'slug' => '[a-zA-Z0-9-]+',
+        'id'   => '[0-9]+']
+    )->name('show');
 });
 
 Route::get('/', function () {
@@ -23,4 +41,4 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
