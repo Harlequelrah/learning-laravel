@@ -1,8 +1,5 @@
 @extends('base')
-@section('title')
-    Blog
-@endsection
-
+@section('title',$post->title)
 
 @section('content')
     <h1>Mon blog</h1>
