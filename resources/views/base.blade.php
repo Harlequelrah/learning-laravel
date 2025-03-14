@@ -8,7 +8,9 @@
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <title>@yield('title')</title>
 </head>
-
+@php
+$routeName= request()->route()->getName();
+@endphp
 <body>
     <nav class="bg-gray-800">
         <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -41,8 +43,14 @@
                             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                             <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"
                                 aria-current="page">Blog</a>
-                            <a href="#"
-                                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Accueil</a>
+                            <a href="{{ route('blog.index') }}" @class([
+                                'rounded-md px-3 py-2 text-sm font-medium',
+                                'text-white bg-gray-700' => str_starts_with($routeName,'blog.'),
+                                'text-gray-300 hover:bg-gray-700 hover:text-white' =>!str_starts_with($routeName,'blog.'),
+                            ])>
+                                Blog
+                            </a>
+
                             <a href="#"
                                 class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Link</a>
                             <a href="#"
