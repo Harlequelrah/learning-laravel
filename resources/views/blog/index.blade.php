@@ -12,7 +12,7 @@
             <h2> {{ $post->title }}</h2>
             <p>{{ $post->content }}</p>
             <p>
-                <a class="bg-blue-500 text-white" href="{{ route('blog.show', ['slug' => $post->slug, 'id' => $post->id]) }}">Lire la suite</a>
+                <a class="bg-blue-500 text-white" href="{{ route('blog.show', ['slug' => $post->slug, 'post' => $post->id]) }}">Lire la suite</a>
             </p>
         </article>
 

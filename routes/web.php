@@ -10,10 +10,10 @@ Route::prefix('/blog')->controller(BlogController::class)->name('blog.')->group(
 
         Route::get("/",'index')->name('index');
 
-    Route::get("/{slug}-{id}",'show')
+    Route::get("/{slug}-{post}",'show')
     ->where([
         'slug' => '[a-zA-Z0-9-]+',
-        'id'   => '[0-9]+']
+        'post'   => '[0-9]+']
     )->name('show');
 
 

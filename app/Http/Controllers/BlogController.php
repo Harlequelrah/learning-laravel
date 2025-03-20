@@ -15,7 +15,7 @@ class BlogController extends Controller
     public function index(): View
     {
         $posts = Post::paginate(1);
-        // retu rn $posts;
+        // return $posts;
         return view('blog.index',
             [
                 'posts' => $posts]
@@ -42,11 +42,10 @@ class BlogController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $slug, string $id): View | RedirectResponse
+    public function show(string $slug, Post $post): View | RedirectResponse
     {
-        $post = Post::findOrFail($id);
         if ($post->slug !== $slug) {
-            return to_route('blog.show', ['slug' => $post->slug, 'id' => $post->id]);
+            return to_route('blog.show', ['slug' => $post->slug, 'post' => $post->id]);
         }
         return view('blog.show',['post'=>$post]);
 
