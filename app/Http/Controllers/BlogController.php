@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostCreateRequest;
 use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class BlogController extends Controller
     // public function index(): Paginator
     public function index(): View
     {
-        $posts = Post::paginate(1);
+        $posts = Post::paginate(2);
         // return $posts;
         return view('blog.index',
             [
@@ -28,15 +29,17 @@ class BlogController extends Controller
      */
     public function create()
     {
-        //
+        return view ('blog.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PostCreateRequest $request)
     {
-        //
+        $post = Post::create($request->validated());
+        return redirect()->route('blog.show',['slug'=>$post->slug,'post'=>$post->id])->with('success',"L'article a été sauvegardé avec succès");
+        // dd($request->all());
     }
 
     /**
