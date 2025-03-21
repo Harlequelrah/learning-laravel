@@ -10,6 +10,10 @@ Route::prefix('/blog')->controller(BlogController::class)->name('blog.')->group(
 
         Route::get("/",'index')->name('index');
 
+        Route::get("/{post}/edit",'edit')->name('edit');
+
+        Route::post("/{post}/edit",'update');
+
         Route::post("/new",'store');
 
         Route::get("/new",'create')->name('create');

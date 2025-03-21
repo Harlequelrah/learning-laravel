@@ -1,10 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PostCreateRequest;
+use App\Http\Requests\FormPostRequest;
 use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class BlogController extends Controller
@@ -29,16 +28,18 @@ class BlogController extends Controller
      */
     public function create()
     {
-        return view ('blog.create');
+        $post = new Post();
+        return view('blog.create',[
+            'post' => $post]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PostCreateRequest $request)
+    public function store(FormPostRequest $request)
     {
         $post = Post::create($request->validated());
-        return redirect()->route('blog.show',['slug'=>$post->slug,'post'=>$post->id])->with('success',"L'article a été sauvegardé avec succès");
+        return redirect()->route('blog.show', ['slug' => $post->slug, 'post' => $post->id])->with('success', "L'article a été sauvegardé avec succès");
         // dd($request->all());
     }
 
@@ -50,24 +51,25 @@ class BlogController extends Controller
         if ($post->slug !== $slug) {
             return to_route('blog.show', ['slug' => $post->slug, 'post' => $post->id]);
         }
-        return view('blog.show',['post'=>$post]);
+        return view('blog.show', ['post' => $post]);
 
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Post $post)
     {
-        //
+        return view('blog.edit', ['post' => $post]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(FormPostRequest $request, Post $post)
     {
-        //
+        $post->update($request->validated());
+        return redirect()->route('blog.show', ['slug' => $post->slug, 'post' => $post->id])->with('success', "L'article a été modifié avec succès");
     }
 
     /**
