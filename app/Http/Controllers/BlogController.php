@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FormPostRequest;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -66,7 +67,10 @@ class BlogController extends Controller
     {
         $post = new Post();
         return view('blog.create', [
-            'post' => $post]);
+                'post' => $post,
+                'categories'=>Category::select('id','name')->get(),
+                'tags'=>Tag::select('id','name')->get(),
+        ]);
     }
 
     /**
@@ -75,6 +79,8 @@ class BlogController extends Controller
     public function store(FormPostRequest $request)
     {
         $post = Post::create($request->validated());
+        $post->tags()->sync($request->validated('tags'));
+
         return redirect()->route('blog.show', ['slug' => $post->slug, 'post' => $post->id])->with('success', "L'article a été sauvegardé avec succès");
         // dd($request->all());
     }
@@ -96,7 +102,13 @@ class BlogController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('blog.edit', ['post' => $post]);
+        return view(
+            'blog.edit',
+            [
+                'post' => $post,
+                'categories'=>Category::select('id','name')->get(),
+                'tags'=>Tag::select('id','name')->get(),
+            ]);
     }
 
     /**
@@ -105,6 +117,7 @@ class BlogController extends Controller
     public function update(FormPostRequest $request, Post $post)
     {
         $post->update($request->validated());
+        $post->tags()->sync($request->validated('tags'));
         return redirect()->route('blog.show', ['slug' => $post->slug, 'post' => $post->id])->with('success', "L'article a été modifié avec succès");
     }
 

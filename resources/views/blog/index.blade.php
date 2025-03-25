@@ -10,6 +10,19 @@
         @forelse($posts as $post)
             <article class="bg-white shadow-md rounded-lg p-6 mb-6">
                 <h2 class="text-2xl font-semibold text-gray-900">{{ $post->title }}</h2>
+                <p class="text-gray-700 leading-relaxed">
+                    @if($post->category)
+                        Category {{$post->category->name}}
+                    @else
+                        No category
+                    @endif
+                    ,
+                    @if(!$post->tags->isEmpty())
+                    @foreach($post->tags as $tag)
+                    <span class="inline-block bg-gray-200 px-2 py-0.5 rounded-sm text-xs font-medium text-gray-800 mr-1">#{{$tag->name}}</span>
+                    @endforeach
+                    @endif
+                </p>
                 <p class="text-gray-700 mt-2">{{ Str::limit($post->content, 150, '...') }}</p>
                 <p class="mt-4">
                     <a href="{{ route('blog.show', ['slug' => $post->slug, 'post' => $post->id]) }}"
